@@ -11,7 +11,8 @@ from app.core.base import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-config.set_main_option('sqlalchemy.url', 'sqlite+aiosqlite:///./fastapi.db')
+DATABASE_URL = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
+config.set_main_option('sqlalchemy.url', DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  test_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: "pytest -vv"
+    networks:
+      - test_network
+
+
+networks:
+    test_network:
+      external:
+        name: web_network

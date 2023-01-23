@@ -1,5 +1,19 @@
 # REST API для меню ресторана
 
+
+#### Запустить приложение
+```
+docker-compose up -d --build
+```
+
+#### Запустить тесты
+```
+docker-compose -f docker-compose.tests.yml up --build
+```
+
+Документация доступна по адресу ```http://127.0.0.1:8000/docs```
+
+
 ### Меню
 + **POST**   ```/api/v1/menus```создание меню
 + **GET** ```/api/v1/menus``` просмотр списка меню
@@ -20,42 +34,3 @@
 + **PATCH** ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` обновление блюда
 + **GET**   ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` просмотр определенного блюда
 + **DELETE** ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` удаление блюда
-
----
-### Как запустить проект
-Клонировать репозиторий и перейти в него в командной строке:
-
-```
-git clone https://github.com/kh199/restaurant_menu
-```
-
-Cоздать и активировать виртуальное окружение:
-```
-python -m venv env
-```
-```
-source venv/scripts/activate
-```
-
-Установить зависимости из файла requirements.txt:
-```
-python -m pip install --upgrade pip
-```
-```
-pip install -r requirements.txt
-```
-
-Запустить приложение:
-```
-uvicorn app.main:app
-```
-
----
-### Стек
-+ Python 11
-+ FastAPI
-+ SQLite
-
-
-### Автор
-**Екатерина Каричева** [kh199](https://github.com/kh199)
