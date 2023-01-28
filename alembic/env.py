@@ -6,12 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
 from app.core.base import Base
+from app.core.config import DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-DATABASE_URL = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
 config.set_main_option('sqlalchemy.url', DATABASE_URL)
 
 # Interpret the config file for Python logging.
@@ -43,12 +43,12 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = config.get_main_option('sqlalchemy.url')
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={'paramstyle': 'named'},
     )
 
     with context.begin_transaction():
@@ -72,10 +72,10 @@ async def run_migrations_online():
     connectable = AsyncEngine(
         engine_from_config(
             config.get_section(config.config_ini_section),
-            prefix="sqlalchemy.",
+            prefix='sqlalchemy.',
             poolclass=pool.NullPool,
             future=True,
-        )
+        ),
     )
 
     async with connectable.connect() as connection:

@@ -1,5 +1,5 @@
 import asyncio
-from typing import Generator
+from collections.abc import Generator
 
 import pytest
 import pytest_asyncio
@@ -16,7 +16,7 @@ from tests.test_data import dish_data, menu_data, submenu_data
 async_engine = create_async_engine('sqlite+aiosqlite:///./test.db')
 
 TestingSessionLocal = sessionmaker(
-    async_engine, expire_on_commit=False, class_=AsyncSession
+    async_engine, expire_on_commit=False, class_=AsyncSession,
 )
 
 

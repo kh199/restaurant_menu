@@ -12,14 +12,14 @@ async def test_create_submenu(async_client: AsyncClient, create_menu):
 
     response = await async_client.post(
         f'/api/v1/menus/{create_menu.id}/submenus/',
-        data=json.dumps(submenu_data)
+        data=json.dumps(submenu_data),
     )
     resp_data = response.json()
     assert response.status_code == 201
     assert (sorted(list(resp_data.keys())) == submenu_keys)
-    assert resp_data["title"] == submenu_data["title"]
-    assert resp_data["description"] == submenu_data["description"]
-    assert resp_data["dishes_count"] == 0
+    assert resp_data['title'] == submenu_data['title']
+    assert resp_data['description'] == submenu_data['description']
+    assert resp_data['dishes_count'] == 0
 
 
 async def test_get_submenu_list(async_client: AsyncClient, create_submenu):
@@ -39,7 +39,7 @@ async def test_get_empty_submenu_list(async_client: AsyncClient, create_menu):
     """Просмотр пустого списка подменю"""
 
     response = await async_client.get(
-        f'/api/v1/menus/{create_menu.id}/submenus/'
+        f'/api/v1/menus/{create_menu.id}/submenus/',
     )
     assert response.status_code == 200
     resp_data = response.json()
@@ -52,27 +52,27 @@ async def test_get_submenu_by_id(async_client: AsyncClient, create_submenu):
 
     menu_id = create_submenu.menu_id
     response = await async_client.get(
-        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}'
+        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
     )
     resp_data = response.json()
     assert response.status_code == 200
     assert (sorted(list(resp_data.keys())) == submenu_keys)
-    assert resp_data["title"] == submenu_data["title"]
-    assert resp_data["description"] == submenu_data["description"]
-    assert resp_data["dishes_count"] == 0
+    assert resp_data['title'] == submenu_data['title']
+    assert resp_data['description'] == submenu_data['description']
+    assert resp_data['dishes_count'] == 0
 
 
 async def test_get_submenu_not_found(async_client: AsyncClient, create_menu):
 
     """GET-запрос к несуществующему подменю"""
 
-    submenu_id = "not-id"
+    submenu_id = 'not-id'
     response = await async_client.get(
-        f'/api/v1/menus/{create_menu.id}/submenus/{submenu_id}'
+        f'/api/v1/menus/{create_menu.id}/submenus/{submenu_id}',
     )
     assert response.status_code == 404
     resp_data = response.json()
-    assert resp_data["detail"] == "submenu not found"
+    assert resp_data['detail'] == 'submenu not found'
 
 
 async def test_update_submenu(async_client: AsyncClient, create_submenu):
@@ -82,28 +82,28 @@ async def test_update_submenu(async_client: AsyncClient, create_submenu):
     menu_id = create_submenu.menu_id
     response = await async_client.patch(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
-        data=json.dumps(updated_submenu_data)
+        data=json.dumps(updated_submenu_data),
     )
     resp_data = response.json()
     assert response.status_code == 200
     assert (sorted(list(resp_data.keys())) == submenu_keys)
-    assert resp_data["title"] == updated_submenu_data["title"]
-    assert resp_data["description"] == updated_submenu_data["description"]
-    assert resp_data["dishes_count"] == 0
+    assert resp_data['title'] == updated_submenu_data['title']
+    assert resp_data['description'] == updated_submenu_data['description']
+    assert resp_data['dishes_count'] == 0
 
 
 async def test_patch_submenu_not_found(async_client: AsyncClient, create_menu):
 
     """PATCH-запрос к несуществующему подменю"""
 
-    submenu_id = "not-id"
+    submenu_id = 'not-id'
     response = await async_client.patch(
         f'/api/v1/menus/{create_menu.id}/submenus/{submenu_id}',
-        data=json.dumps(updated_menu_data)
+        data=json.dumps(updated_menu_data),
     )
     assert response.status_code == 404
     resp_data = response.json()
-    assert resp_data["detail"] == "submenu not found"
+    assert resp_data['detail'] == 'submenu not found'
 
 
 async def test_delete_submenu(async_client: AsyncClient, create_submenu):
@@ -112,13 +112,13 @@ async def test_delete_submenu(async_client: AsyncClient, create_submenu):
 
     menu_id = create_submenu.menu_id
     response = await async_client.delete(
-        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}'
+        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
     )
     resp_data = response.json()
     assert response.status_code == 200
-    assert resp_data["status"] is True
-    assert resp_data["message"] == "The submenu has been deleted"
+    assert resp_data['status'] is True
+    assert resp_data['message'] == 'The submenu has been deleted'
     deleted_resp = await async_client.get(
-        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}'
+        f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
     )
     assert deleted_resp.status_code == 404

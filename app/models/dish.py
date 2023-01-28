@@ -1,14 +1,10 @@
-from sqlalchemy import Column, ForeignKey, String, Text
+from sqlalchemy import Column, ForeignKey, String
 
-from app.core.db import Base
+from app.models.base import BaseModel
+from app.models.utils import generate_uuid
 
-from .utils import generate_uuid
 
-
-class Dish(Base):
-    __tablename__ = "dish"
+class Dish(BaseModel):
     id = Column(String, primary_key=True, default=generate_uuid)
-    title = Column(String(100), nullable=False)
-    description = Column(Text, nullable=False)
     price = Column(String, nullable=False)
-    submenu_id = Column(String, ForeignKey("submenu.id"))
+    parent_id = Column(String, ForeignKey('submenu.id'))
