@@ -5,7 +5,6 @@
 ```
 docker-compose up -d --build
 ```
-
 #### Запустить тесты
 ```
 docker-compose -f docker-compose.tests.yml up --build

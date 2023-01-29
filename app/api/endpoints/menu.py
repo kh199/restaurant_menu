@@ -3,12 +3,15 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import menu_validator
+from app.cache.services.menu_service import menu_service
 from app.core.db import get_async_session
-from app.crud.menu import menu_crud
 from app.schemas.menu import MenuCreate, MenuOut, MenuUpdate
+from app.schemas.status import StatusMessage
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/menus',
+    tags=['Menus'],
+)
 
 
 @router.post(
@@ -27,7 +30,7 @@ async def create_new_menu(
     - **title**: название (должно быть уникальным)
     - **description**: описание (опционально)
     """
-    return await menu_crud.create(menu, session)
+    return await menu_service.create_menu(menu, session)
 
 
 @router.get(
@@ -40,8 +43,7 @@ async def get_one_menu(
     menu_id: str,
     session: AsyncSession = Depends(get_async_session),
 ):
-    await menu_validator.check_exists(menu_id, session)
-    return await menu_crud.get_one(menu_id, session)
+    return await menu_service.get_menu(menu_id, session)
 
 
 @router.get(
@@ -53,7 +55,7 @@ async def get_one_menu(
 async def get_all_menus(
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await menu_crud.get_many(session)
+    return await menu_service.get_menu_list(session)
 
 
 @router.patch(
@@ -73,12 +75,12 @@ async def to_update_menu(
     - **title**: обновленное название (должно быть уникальным)
     - **description**: обновленное описание (опционально)
     """
-    menu = await menu_validator.check_exists(menu_id, session)
-    return await menu_crud.update(menu, obj_in, session)
+    return await menu_service.update_menu(menu_id, obj_in, session)
 
 
 @router.delete(
     '/{menu_id}',
+    response_model=StatusMessage,
     status_code=HTTPStatus.OK,
     summary='Удаление меню по id',
 )
@@ -86,7 +88,4 @@ async def to_delete_menu(
         menu_id: str,
         session: AsyncSession = Depends(get_async_session),
 ):
-    menu = await menu_crud.get_one(menu_id, session)
-    if menu is not None:
-        await menu_crud.delete(menu, session)
-        return {'status': True, 'message': 'The menu has been deleted'}
+    return await menu_service.delete_menu(menu_id, session)

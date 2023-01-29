@@ -20,14 +20,14 @@ class Validation:
         model_name = self.model.__tablename__
         obj = await session.execute(
             select(self.model).where(
-                self.model.id == obj_id
-            )
+                self.model.id == obj_id,
+            ),
         )
         obj = obj.scalars().first()
         if obj is None:
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND,
-                detail=f'{model_name} not found'
+                detail=f'{model_name} not found',
             )
         return obj
 

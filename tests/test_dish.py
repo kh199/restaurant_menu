@@ -11,7 +11,7 @@ async def test_create_dish(async_client: AsyncClient, create_submenu):
 
     """Создание блюда"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.post(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}/dishes/',
         data=json.dumps(dish_data),
@@ -29,7 +29,7 @@ async def test_get_dish_list(async_client: AsyncClient, create_dish):
     """Просмотр списка блюд"""
 
     menu = db.query(Menu).first()
-    submenu = db.query(SubMenu).filter_by(menu_id=menu.id).first()
+    submenu = db.query(SubMenu).filter_by(parent_id=menu.id).first()
     response = await async_client.get(
         f'/api/v1/menus/{menu.id}/submenus/{submenu.id}/dishes/',
     )
@@ -43,7 +43,7 @@ async def test_get_empty_dish_list(async_client: AsyncClient, create_submenu):
 
     """Просмотр пустого списка блюд"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.get(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}/dishes/',
     )
@@ -57,7 +57,7 @@ async def test_get_dish_by_id(async_client: AsyncClient, create_dish):
     """Просмотр блюда по id"""
 
     menu = db.query(Menu).first()
-    submenu = db.query(SubMenu).filter_by(menu_id=menu.id).first()
+    submenu = db.query(SubMenu).filter_by(parent_id=menu.id).first()
     response = await async_client.get(
         f'/api/v1/menus/{menu.id}/submenus/'
         f'{submenu.id}/dishes/{create_dish.id}',
@@ -76,7 +76,7 @@ async def test_get_dish_not_found(
 
     """GET-запрос к несуществующему блюду"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     dish_id = 'not-id'
     subresp = await async_client.get(
         f'/api/v1/menus/{menu_id}/submenus/'
@@ -92,7 +92,7 @@ async def test_update_dish(async_client: AsyncClient, create_dish):
     """Обновление блюда"""
 
     menu = db.query(Menu).first()
-    submenu = db.query(SubMenu).filter_by(menu_id=menu.id).first()
+    submenu = db.query(SubMenu).filter_by(parent_id=menu.id).first()
     response = await async_client.patch(
         f'/api/v1/menus/{menu.id}/submenus/'
         f'{submenu.id}/dishes/{create_dish.id}',
@@ -112,7 +112,7 @@ async def test_patch_dish_not_found(
 
     """PATCH-запрос к несуществующему блюду"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     dish_id = 'not-id'
     response = await async_client.patch(
         f'/api/v1/menus/{menu_id}/submenus/'
@@ -129,7 +129,7 @@ async def test_delete_dish(async_client: AsyncClient, create_dish):
     """Удаление блюда"""
 
     menu = db.query(Menu).first()
-    submenu = db.query(SubMenu).filter_by(menu_id=menu.id).first()
+    submenu = db.query(SubMenu).filter_by(parent_id=menu.id).first()
     response = await async_client.delete(
         f'/api/v1/menus/{menu.id}/submenus/'
         f'{submenu.id}/dishes/{create_dish.id}',

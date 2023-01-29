@@ -26,7 +26,7 @@ async def test_get_submenu_list(async_client: AsyncClient, create_submenu):
 
     """Просмотр списка подменю"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.get(f'/api/v1/menus/{menu_id}/submenus/')
     assert response.status_code == 200
     subresp_data = response.json()
@@ -50,7 +50,7 @@ async def test_get_submenu_by_id(async_client: AsyncClient, create_submenu):
 
     """Просмотр подменю по id"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.get(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
     )
@@ -79,7 +79,7 @@ async def test_update_submenu(async_client: AsyncClient, create_submenu):
 
     """Обновление подменю"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.patch(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
         data=json.dumps(updated_submenu_data),
@@ -110,7 +110,7 @@ async def test_delete_submenu(async_client: AsyncClient, create_submenu):
 
     """Удаление подменю"""
 
-    menu_id = create_submenu.menu_id
+    menu_id = create_submenu.parent_id
     response = await async_client.delete(
         f'/api/v1/menus/{menu_id}/submenus/{create_submenu.id}',
     )

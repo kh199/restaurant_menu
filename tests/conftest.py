@@ -73,7 +73,7 @@ def create_menu():
 
 @pytest.fixture
 def create_submenu(create_menu):
-    new_submenu = SubMenu(**submenu_data, menu_id=create_menu.id)
+    new_submenu = SubMenu(**submenu_data, parent_id=create_menu.id)
     db.add(new_submenu)
     db.commit()
     return new_submenu
@@ -81,7 +81,7 @@ def create_submenu(create_menu):
 
 @pytest.fixture
 def create_dish(create_submenu):
-    new_dish = Dish(**dish_data, submenu_id=create_submenu.id)
+    new_dish = Dish(**dish_data, parent_id=create_submenu.id)
     db.add(new_dish)
     db.commit()
     return new_dish

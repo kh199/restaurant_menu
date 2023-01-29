@@ -1,7 +1,6 @@
 from pydantic import BaseSettings
 
-# DATABASE_URL = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
-DATABASE_URL = 'sqlite+aiosqlite:///./fastapi.db'
+DATABASE_URL = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
 
 
 class Settings(BaseSettings):

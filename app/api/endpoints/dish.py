@@ -3,12 +3,15 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import dish_validator
+from app.cache.services.dish_service import dish_service
 from app.core.db import get_async_session
-from app.crud.dish import dish_crud
 from app.schemas.dish import DishCreate, DishOut, DishUpdate
+from app.schemas.status import StatusMessage
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/menus/{menu_id}/submenus/{submenu_id}/dishes',
+    tags=['Dishes'],
+)
 
 
 @router.get(
@@ -24,7 +27,7 @@ async def get_all_dishes(
     """
     Получение списка всех блюд для конкретного подменю
     """
-    return await dish_crud.read_all_subobjects(submenu_id, session)
+    return await dish_service.get_dish_list(submenu_id, session)
 
 
 @router.get(
@@ -37,8 +40,7 @@ async def get_one_dish(
     dish_id: str,
     session: AsyncSession = Depends(get_async_session),
 ):
-    await dish_validator.check_exists(dish_id, session)
-    return await dish_crud.get_one(dish_id, session)
+    return await dish_service.get_dish(dish_id, session)
 
 
 @router.post(
@@ -60,7 +62,7 @@ async def create_new_dish(
     - **price**: цена (обязательно), должна быть строкой,
                  округляется до двух знаков после запятой
     """
-    return await dish_crud.create_subobject(submenu_id, dish, session)
+    return await dish_service.create_dish(submenu_id, dish, session)
 
 
 @router.patch(
@@ -82,12 +84,12 @@ async def to_update_dish(
     - **price**: обновленная цена (обязательно), должна быть строкой,
                  округляется до двух знаков после запятой
     """
-    dish = await dish_validator.check_exists(dish_id, session)
-    return await dish_crud.update(dish, obj_in, session)
+    return await dish_service.update_dish(dish_id, obj_in, session)
 
 
 @router.delete(
     '/{dish_id}',
+    response_model=StatusMessage,
     status_code=HTTPStatus.OK,
     summary='Удаление блюда по id',
 )
@@ -95,7 +97,4 @@ async def to_delete_dish(
         dish_id: str,
         session: AsyncSession = Depends(get_async_session),
 ):
-    dish = await dish_crud.get_one(dish_id, session)
-    if dish is not None:
-        await dish_crud.delete(dish, session)
-        return {'status': True, 'message': 'The dish has been deleted'}
+    return await dish_service.delete_dish(dish_id, session)
