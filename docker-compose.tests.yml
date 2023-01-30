@@ -2,15 +2,36 @@ version: '3.8'
 
 services:
   test_app:
+    container_name: "test_app"
     build:
       context: .
       dockerfile: Dockerfile
-    command: "pytest -vv"
+    entrypoint: >
+      sh -c "
+        pytest -vv"
     networks:
       - test_network
+    ports:
+      - "8001:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
 
+  redis:
+    container_name: "redis"
+    image: redis:latest
+    expose:
+      - 6379
+    ports:
+      - "6378:6379"
+    networks:
+      - test_network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 20s
+      retries: 20
 
 networks:
-    test_network:
-      external:
-        name: web_network
+  test_network:
+    driver: bridge

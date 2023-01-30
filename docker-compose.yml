@@ -5,12 +5,10 @@ services:
     image: postgres:15.1-alpine
     volumes:
       - /var/lib/postgresql/data/
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: 'postgres'
+    env_file:
+      - .env
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
       interval: 5s
       timeout: 20s
       retries: 100
@@ -25,12 +23,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_HOST: 'db'
-      POSTGRES_PORT: 5432
-      POSTGRES_DB : 'postgres'
+    env_file:
+      - .env
     entrypoint: >
       sh -c "
         alembic upgrade head &&

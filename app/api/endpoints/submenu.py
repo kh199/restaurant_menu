@@ -23,7 +23,7 @@ router = APIRouter(
 async def get_all_submenus(
     menu_id: str,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> list[SubMenuOut]:
     """
     Получение списка всех подменю для конкретного меню
     """
@@ -39,7 +39,7 @@ async def get_all_submenus(
 async def get_one_submenu(
     submenu_id: str,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> SubMenuOut:
     return await submenu_service.get_submenu(submenu_id, session)
 
 
@@ -53,7 +53,7 @@ async def create_new_submenu(
     menu_id: str,
     submenu: SubMenuCreate,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> SubMenuOut:
     """
     Создание подменю:
 
@@ -73,7 +73,7 @@ async def to_update_submenu(
         submenu_id: str,
         obj_in: SubMenuUpdate,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> SubMenuOut:
     """
     Обновление подменю:
 
@@ -92,5 +92,5 @@ async def to_update_submenu(
 async def to_delete_submenu(
         submenu_id: str,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> StatusMessage:
     return await submenu_service.delete_submenu(submenu_id, session)

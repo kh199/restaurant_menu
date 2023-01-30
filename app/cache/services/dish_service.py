@@ -27,6 +27,7 @@ class DishCache:
 
     @staticmethod
     async def create_dish(submenu_id, dish, session):
+        await dish_validator.check_title(dish.title, session)
         dish = await dish_crud.create_subobject(submenu_id, dish, session)
         await set_cache('dish', dish.id, dish)
         await clear_cache(submenu_id, 'dish')

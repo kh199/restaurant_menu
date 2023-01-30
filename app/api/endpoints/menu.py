@@ -23,7 +23,7 @@ router = APIRouter(
 async def create_new_menu(
     menu: MenuCreate,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> MenuOut:
     """
     Создание меню:
 
@@ -42,7 +42,7 @@ async def create_new_menu(
 async def get_one_menu(
     menu_id: str,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> MenuOut:
     return await menu_service.get_menu(menu_id, session)
 
 
@@ -54,7 +54,7 @@ async def get_one_menu(
 )
 async def get_all_menus(
     session: AsyncSession = Depends(get_async_session),
-):
+) -> list[MenuOut]:
     return await menu_service.get_menu_list(session)
 
 
@@ -68,7 +68,7 @@ async def to_update_menu(
         menu_id: str,
         obj_in: MenuUpdate,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> MenuOut:
     """
     Обновление меню:
 
@@ -87,5 +87,5 @@ async def to_update_menu(
 async def to_delete_menu(
         menu_id: str,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> StatusMessage:
     return await menu_service.delete_menu(menu_id, session)

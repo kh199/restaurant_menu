@@ -8,6 +8,7 @@ class MenuCache:
 
     @staticmethod
     async def create_menu(menu, session):
+        await menu_validator.check_title(menu.title, session)
         menu = await menu_crud.create(menu, session)
         await set_cache('menu', menu.id, menu)
         await clear_cache('menu', 'list')

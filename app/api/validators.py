@@ -31,6 +31,25 @@ class Validation:
             )
         return obj
 
+    async def check_title(
+            self,
+            obj_title: str,
+            session: AsyncSession,
+    ):
+        model_name = self.model.__tablename__
+        obj_id = await session.execute(
+            select(self.model.id).where(
+                self.model.title == obj_title,
+            ),
+        )
+        obj_id = obj_id.scalars().first()
+        if obj_id is not None:
+            raise HTTPException(
+                status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+                detail=f'{model_name} с таким именем уже существует!',
+            )
+        return obj_id
+
 
 menu_validator = Validation(Menu)
 submenu_validator = Validation(SubMenu)

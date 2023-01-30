@@ -23,7 +23,7 @@ router = APIRouter(
 async def get_all_dishes(
     submenu_id: str,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> list[DishOut]:
     """
     Получение списка всех блюд для конкретного подменю
     """
@@ -39,7 +39,7 @@ async def get_all_dishes(
 async def get_one_dish(
     dish_id: str,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> DishOut:
     return await dish_service.get_dish(dish_id, session)
 
 
@@ -53,7 +53,7 @@ async def create_new_dish(
     submenu_id: str,
     dish: DishCreate,
     session: AsyncSession = Depends(get_async_session),
-):
+) -> DishOut:
     """
     Создание блюда:
 
@@ -75,7 +75,7 @@ async def to_update_dish(
         dish_id: str,
         obj_in: DishUpdate,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> DishOut:
     """
     Обновление блюда:
 
@@ -96,5 +96,5 @@ async def to_update_dish(
 async def to_delete_dish(
         dish_id: str,
         session: AsyncSession = Depends(get_async_session),
-):
+) -> StatusMessage:
     return await dish_service.delete_dish(dish_id, session)

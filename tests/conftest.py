@@ -8,12 +8,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.core.config import TEST_ASYNC_DATABASE_URL, TEST_DATABASE_URL
 from app.core.db import Base, get_async_session
 from app.main import app
 from app.models import Dish, Menu, SubMenu
 from tests.test_data import dish_data, menu_data, submenu_data
 
-async_engine = create_async_engine('sqlite+aiosqlite:///./test.db')
+async_engine = create_async_engine(TEST_ASYNC_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(
     async_engine, expire_on_commit=False, class_=AsyncSession,
@@ -48,7 +49,7 @@ async def async_client() -> AsyncClient:
         yield client
 
 
-engine = create_engine('sqlite:///./test.db')
+engine = create_engine(TEST_DATABASE_URL)
 Session = sessionmaker(bind=engine)
 
 

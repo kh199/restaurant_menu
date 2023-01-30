@@ -27,6 +27,7 @@ class SubMenuCache:
 
     @staticmethod
     async def create_submenu(menu_id, submenu, session):
+        await submenu_validator.check_title(submenu.title, session)
         submenu = await submenu_crud.create_subobject(
             menu_id, submenu, session,
         )
