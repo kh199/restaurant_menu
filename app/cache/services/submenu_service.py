@@ -28,7 +28,7 @@ class SubMenuCache:
     @staticmethod
     async def create_submenu(menu_id, submenu, session):
         submenu = await submenu_crud.create_subobject(
-            menu_id, submenu, session
+            menu_id, submenu, session,
         )
         await set_cache('submenu', submenu.id, submenu)
         await clear_cache('menu', menu_id)
