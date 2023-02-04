@@ -87,3 +87,16 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_subobj)
         return db_subobj
+
+    async def create_from_dict(
+            self,
+            id: str,
+            title: str,
+            description: str,
+            session: AsyncSession,
+    ):
+        db_obj = self.model(id=id, title=title, description=description)
+        session.add(db_obj)
+        await session.commit()
+        await session.refresh(db_obj)
+        return db_obj

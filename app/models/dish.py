@@ -1,5 +1,4 @@
 from sqlalchemy import Column, ForeignKey, String
-
 from app.models.base import BaseModel
 from app.models.utils import generate_uuid
 
