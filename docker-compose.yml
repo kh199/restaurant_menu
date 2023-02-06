@@ -41,8 +41,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
 
   redis:
     image: redis:latest
@@ -73,9 +71,6 @@ services:
       - .env
     networks:
       - web_network
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
 
   rabbitmq:
     image: rabbitmq:latest
