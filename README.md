@@ -3,16 +3,16 @@
 
 #### Запустить приложение
 ```
-docker-compose up -d 
+docker-compose up -d
 ```
 #### Запустить тесты
 ```
-docker-compose -f docker-compose.tests.yml up 
+docker-compose -f docker-compose.tests.yml up
 ```
 
 Документация доступна по адресу ```http://127.0.0.1:8000/docs```
 
-### Data Dump 
+### Data Dump
 + **POST**   ```/api/v1/dump``` наполнение базы готовыми данными
 
 ### Report
@@ -39,4 +39,3 @@ docker-compose -f docker-compose.tests.yml up
 + **PATCH** ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` обновление блюда
 + **GET**   ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` просмотр определенного блюда
 + **DELETE** ```/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}``` удаление блюда
-
