@@ -17,7 +17,9 @@ from tests.test_data import dish_data, menu_data, submenu_data
 async_engine = create_async_engine(TEST_ASYNC_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(
-    async_engine, expire_on_commit=False, class_=AsyncSession,
+    async_engine,
+    expire_on_commit=False,
+    class_=AsyncSession,
 )
 
 
@@ -35,7 +37,7 @@ async def init_db():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def event_loop(request) -> Generator:
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -45,7 +47,7 @@ def event_loop(request) -> Generator:
 @pytest_asyncio.fixture
 async def async_client() -> AsyncClient:
     app.dependency_overrides[get_async_session] = override_db
-    async with AsyncClient(app=app, base_url='http://test') as client:
+    async with AsyncClient(app=app, base_url="http://test") as client:
         yield client
 
 

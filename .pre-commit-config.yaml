@@ -2,47 +2,55 @@ repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: check-added-large-files
-    -   id: check-yaml
-    -   id: check-case-conflict
-    -   id: check-merge-conflict
-    -   id: double-quote-string-fixer
-    -   id: requirements-txt-fixer
+    -   id: trailing-whitespace  # убирает лишние пробелы
+    -   id: check-added-large-files  # проверяет тяжелые файлы на изменения
+    -   id: end-of-file-fixer  # добавляет пустую строку в конце файла
+    -   id: check-yaml  # проверяет синтаксис .yaml файлов
+    -   id: check-json  # проверяет синтаксис .json файлов
+    -   id: check-case-conflict  # проверяет файлы, которые могут конфликтовать в файловых системах без учета регистра.
+    -   id: check-merge-conflict  # проверяет файлы, содержащие конфликтные строки слияния.
 
--  repo: https://github.com/pycqa/isort
-   rev: 5.12.0
-   hooks:
-     - id: isort
-       exclude: __init__.py
-       args: ['--filter-files']
-
--   repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.4.0
+# Отсортировывает импорты в проекте
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
     hooks:
-    -   id: add-trailing-comma
-        exclude: test_submenu.py # конфликт с isort
-        args: [--py36-plus]
+      - id: isort
+        exclude: __init__.py
+        args: [ --profile, black, --filter-files ]
 
+# Обновляет синтаксис Python кода в соответствии с последними версиями
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.3.1
     hooks:
     -   id: pyupgrade
-        args: [--py311-plus]
+        args: [--py310-plus]
 
+# Форматирует код под PEP8
 -   repo: https://github.com/pre-commit/mirrors-autopep8
     rev: v2.0.1
     hooks:
     -   id: autopep8
+        args: [ "-i", "--in-place", "--max-line-length=120" ]
 
+# Сканер стилистических ошибок, нарушающие договоренности PEP8
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
     -   id: flake8
         exclude: __init__.py
+        args: [ "--ignore=F821", "--max-line-length=120" ]
 
+# Проверка статических типов с помощью mypy
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.991
     hooks:
     -   id: mypy
         exclude: alembic/
+        args: ["--install-types", "--non-interactive", "--ignore-missing-imports"]
+
+# Форматирует код под PEP8 c помощью black
+-   repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+    - id: black
+      language_version: python3.11

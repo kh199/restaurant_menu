@@ -9,16 +9,16 @@ from app.schemas.dish import DishCreate, DishOut, DishUpdate
 from app.schemas.status import StatusMessage
 
 router = APIRouter(
-    prefix='/menus/{menu_id}/submenus/{submenu_id}/dishes',
-    tags=['Dishes'],
+    prefix="/menus/{menu_id}/submenus/{submenu_id}/dishes",
+    tags=["Dishes"],
 )
 
 
 @router.get(
-    '/',
+    "/",
     response_model=list[DishOut],
     status_code=HTTPStatus.OK,
-    summary='Просмотр списка блюд',
+    summary="Просмотр списка блюд",
 )
 async def get_all_dishes(
     submenu_id: str,
@@ -31,10 +31,10 @@ async def get_all_dishes(
 
 
 @router.get(
-    '/{dish_id}',
+    "/{dish_id}",
     response_model=DishOut,
     status_code=HTTPStatus.OK,
-    summary='Просмотр блюда по id',
+    summary="Просмотр блюда по id",
 )
 async def get_one_dish(
     dish_id: str,
@@ -44,10 +44,10 @@ async def get_one_dish(
 
 
 @router.post(
-    '/',
+    "/",
     response_model=DishOut,
     status_code=HTTPStatus.CREATED,
-    summary='Создание блюда',
+    summary="Создание блюда",
 )
 async def create_new_dish(
     submenu_id: str,
@@ -66,15 +66,15 @@ async def create_new_dish(
 
 
 @router.patch(
-    '/{dish_id}',
+    "/{dish_id}",
     response_model=DishOut,
     status_code=HTTPStatus.OK,
-    summary='Обновление блюда',
+    summary="Обновление блюда",
 )
 async def to_update_dish(
-        dish_id: str,
-        obj_in: DishUpdate,
-        session: AsyncSession = Depends(get_async_session),
+    dish_id: str,
+    obj_in: DishUpdate,
+    session: AsyncSession = Depends(get_async_session),
 ) -> DishOut:
     """
     Обновление блюда:
@@ -88,13 +88,13 @@ async def to_update_dish(
 
 
 @router.delete(
-    '/{dish_id}',
+    "/{dish_id}",
     response_model=StatusMessage,
     status_code=HTTPStatus.OK,
-    summary='Удаление блюда по id',
+    summary="Удаление блюда по id",
 )
 async def to_delete_dish(
-        dish_id: str,
-        session: AsyncSession = Depends(get_async_session),
+    dish_id: str,
+    session: AsyncSession = Depends(get_async_session),
 ) -> StatusMessage:
     return await dish_service.delete_dish(dish_id, session)

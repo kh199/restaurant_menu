@@ -7,23 +7,21 @@ class MenuBase(BaseModel):
 
 
 class MenuCreate(MenuBase):
-
     class Config:
         schema_extra = {
-            'example': {
-                'title': 'My menu 1',
-                'description': 'My menu description 1',
+            "example": {
+                "title": "My menu 1",
+                "description": "My menu description 1",
             },
         }
 
 
 class MenuUpdate(MenuBase):
-
     class Config:
         schema_extra = {
-            'example': {
-                'title': 'My updated menu 1',
-                'description': 'My updated menu description 1',
+            "example": {
+                "title": "My updated menu 1",
+                "description": "My updated menu description 1",
             },
         }
 

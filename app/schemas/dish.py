@@ -6,11 +6,11 @@ class DishBase(BaseModel):
     description: str
     price: str
 
-    @validator('price')
+    @validator("price")
     def check_price(cls, value: str):
         if not float(value):
-            raise ValueError('price must be a number')
-        value = format(float(value), '.2f')
+            raise ValueError("price must be a number")
+        value = format(float(value), ".2f")
         return value
 
 
@@ -19,22 +19,21 @@ class DishCreate(DishBase):
 
     class Config:
         schema_extra = {
-            'example': {
-                'title': 'My dish 1',
-                'description': 'My dish description 1',
-                'price': '12.50',
+            "example": {
+                "title": "My dish 1",
+                "description": "My dish description 1",
+                "price": "12.50",
             },
         }
 
 
 class DishUpdate(DishCreate):
-
     class Config:
         schema_extra = {
-            'example': {
-                'title': 'My updated dish 1',
-                'description': 'My updated dish description 1',
-                'price': '14.50',
+            "example": {
+                "title": "My updated dish 1",
+                "description": "My updated dish description 1",
+                "price": "14.50",
             },
         }
 

@@ -18,11 +18,11 @@ async def set_cache(prefix, body, value):
 
 async def clear_cache(prefix, body):
     key = generate_key(prefix, body)
-    keys = await redis.keys(f'{key}*')
+    keys = await redis.keys(f"{key}*")
     if keys:
         await redis.delete(*keys)
 
 
 def generate_key(prefix, body):
-    key = f'{prefix}:{body}'
+    key = f"{prefix}:{body}"
     return key

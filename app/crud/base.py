@@ -4,14 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class CRUDBase:
-
     def __init__(self, model):
         self.model = model
 
     async def get_one(
-            self,
-            obj_id: str,
-            session: AsyncSession,
+        self,
+        obj_id: str,
+        session: AsyncSession,
     ):
         db_obj = await session.execute(
             select(self.model).where(
@@ -21,16 +20,16 @@ class CRUDBase:
         return db_obj.scalars().first()
 
     async def get_many(
-            self,
-            session: AsyncSession,
+        self,
+        session: AsyncSession,
     ):
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
 
     async def create(
-            self,
-            obj_in,
-            session: AsyncSession,
+        self,
+        obj_in,
+        session: AsyncSession,
     ):
         obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data)
@@ -40,10 +39,10 @@ class CRUDBase:
         return db_obj
 
     async def update(
-            self,
-            db_obj,
-            obj_in,
-            session: AsyncSession,
+        self,
+        db_obj,
+        obj_in,
+        session: AsyncSession,
     ):
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict(exclude_unset=True)
@@ -57,18 +56,18 @@ class CRUDBase:
         return db_obj
 
     async def delete(
-            self,
-            db_obj,
-            session: AsyncSession,
+        self,
+        db_obj,
+        session: AsyncSession,
     ):
         await session.delete(db_obj)
         await session.commit()
         return db_obj
 
     async def read_all_subobjects(
-            self,
-            obj_id: str,
-            session: AsyncSession,
+        self,
+        obj_id: str,
+        session: AsyncSession,
     ):
         subobjects = await session.execute(
             select(self.model).where(self.model.parent_id == obj_id),
@@ -76,10 +75,10 @@ class CRUDBase:
         return subobjects.scalars().all()
 
     async def create_subobject(
-            self,
-            obj_id: str,
-            obj_in,
-            session: AsyncSession,
+        self,
+        obj_id: str,
+        obj_in,
+        session: AsyncSession,
     ):
         new_data = obj_in.dict()
         db_subobj = self.model(**new_data, parent_id=obj_id)
@@ -89,11 +88,11 @@ class CRUDBase:
         return db_subobj
 
     async def create_from_dict(
-            self,
-            id: str,
-            title: str,
-            description: str,
-            session: AsyncSession,
+        self,
+        id: str,
+        title: str,
+        description: str,
+        session: AsyncSession,
     ):
         db_obj = self.model(id=id, title=title, description=description)
         session.add(db_obj)

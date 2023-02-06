@@ -5,50 +5,50 @@ from app.schemas.status import StatusMessage
 
 
 class MenuCache:
-
     @staticmethod
     async def create_menu(menu, session):
         await menu_validator.check_title(menu.title, session)
         menu = await menu_crud.create(menu, session)
-        await set_cache('menu', menu.id, menu)
-        await clear_cache('menu', 'list')
+        await set_cache("menu", menu.id, menu)
+        await clear_cache("menu", "list")
         return menu
 
     @staticmethod
     async def get_menu(menu_id, session):
-        cached = await get_cache('menu', menu_id)
+        cached = await get_cache("menu", menu_id)
         if cached:
             return cached
         await menu_validator.check_exists(menu_id, session)
         menu = await menu_crud.get_one(menu_id, session)
-        await set_cache('menu', menu_id, menu)
+        await set_cache("menu", menu_id, menu)
         return menu
 
     @staticmethod
     async def get_menu_list(session):
-        cached = await get_cache('menu', 'list')
+        cached = await get_cache("menu", "list")
         if cached:
             return cached
         menu_list = await menu_crud.get_many(session)
-        await set_cache('menu', 'list', menu_list)
+        await set_cache("menu", "list", menu_list)
         return menu_list
 
     @staticmethod
     async def update_menu(menu_id, obj_in, session):
         menu = await menu_validator.check_exists(menu_id, session)
         menu = await menu_crud.update(menu, obj_in, session)
-        await set_cache('menu', menu.id, menu)
-        await clear_cache('menu', 'list')
+        await set_cache("menu", menu.id, menu)
+        await clear_cache("menu", "list")
         return menu
 
     @staticmethod
     async def delete_menu(menu_id, session):
         menu = await menu_validator.check_exists(menu_id, session)
         await menu_crud.delete(menu, session)
-        await clear_cache('menu', menu_id)
-        await clear_cache('menu', 'list')
+        await clear_cache("menu", menu_id)
+        await clear_cache("menu", "list")
         return StatusMessage(
-            status=True, message='The menu has been deleted',
+            status=True,
+            message="The menu has been deleted",
         )
 
 
