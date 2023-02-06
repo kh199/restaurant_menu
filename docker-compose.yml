@@ -83,8 +83,8 @@ services:
     restart: always
     hostname: rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
     expose:
