@@ -6,7 +6,7 @@ from pydantic import BaseSettings
 
 load_dotenv()
 
-FORMAT = "%d.%m.%Y %H:%M"
+FORMAT = "%d-%m-%Y_%H-%M"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_URL = "http://localhost:8000"

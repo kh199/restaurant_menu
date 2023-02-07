@@ -1,10 +1,8 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db import get_async_session
-from app.report.create_data import create_data_for_report
+from app.report.create_data import CreateData, data_service
 from app.schemas.status import StatusMessage
 
 router = APIRouter(
@@ -19,10 +17,8 @@ router = APIRouter(
     status_code=HTTPStatus.CREATED,
     summary="Наполнение базы данных",
 )
-async def create_menus_for_report(
-    session: AsyncSession = Depends(get_async_session),
-) -> StatusMessage:
+async def create_menus_for_report(service: CreateData = Depends(data_service)):
     """Наполнение базы готовыми данными
     для проверки функции генерирования отчета"""
 
-    return await create_data_for_report(session)
+    return await service.create_data_for_report()

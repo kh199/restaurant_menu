@@ -1,10 +1,8 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.cache.services.dish_service import dish_service
-from app.core.db import get_async_session
+from app.cache.services.dish_service import DishCache, dish_service
 from app.schemas.dish import DishCreate, DishOut, DishUpdate
 from app.schemas.status import StatusMessage
 
@@ -21,13 +19,12 @@ router = APIRouter(
     summary="Просмотр списка блюд",
 )
 async def get_all_dishes(
-    submenu_id: str,
-    session: AsyncSession = Depends(get_async_session),
+    submenu_id: str, service: DishCache = Depends(dish_service)
 ) -> list[DishOut]:
     """
     Получение списка всех блюд для конкретного подменю
     """
-    return await dish_service.get_dish_list(submenu_id, session)
+    return await service.get_dish_list(submenu_id)
 
 
 @router.get(
@@ -37,10 +34,9 @@ async def get_all_dishes(
     summary="Просмотр блюда по id",
 )
 async def get_one_dish(
-    dish_id: str,
-    session: AsyncSession = Depends(get_async_session),
+    dish_id: str, service: DishCache = Depends(dish_service)
 ) -> DishOut:
-    return await dish_service.get_dish(dish_id, session)
+    return await service.get_dish(dish_id)
 
 
 @router.post(
@@ -50,9 +46,7 @@ async def get_one_dish(
     summary="Создание блюда",
 )
 async def create_new_dish(
-    submenu_id: str,
-    dish: DishCreate,
-    session: AsyncSession = Depends(get_async_session),
+    submenu_id: str, dish: DishCreate, service: DishCache = Depends(dish_service)
 ) -> DishOut:
     """
     Создание блюда:
@@ -62,7 +56,7 @@ async def create_new_dish(
     - **price**: цена (обязательно), должна быть строкой,
                  округляется до двух знаков после запятой
     """
-    return await dish_service.create_dish(submenu_id, dish, session)
+    return await service.create_dish(submenu_id, dish)
 
 
 @router.patch(
@@ -72,9 +66,7 @@ async def create_new_dish(
     summary="Обновление блюда",
 )
 async def to_update_dish(
-    dish_id: str,
-    obj_in: DishUpdate,
-    session: AsyncSession = Depends(get_async_session),
+    dish_id: str, obj_in: DishUpdate, service: DishCache = Depends(dish_service)
 ) -> DishOut:
     """
     Обновление блюда:
@@ -84,7 +76,7 @@ async def to_update_dish(
     - **price**: обновленная цена (обязательно), должна быть строкой,
                  округляется до двух знаков после запятой
     """
-    return await dish_service.update_dish(dish_id, obj_in, session)
+    return await service.update_dish(dish_id, obj_in)
 
 
 @router.delete(
@@ -94,7 +86,6 @@ async def to_update_dish(
     summary="Удаление блюда по id",
 )
 async def to_delete_dish(
-    dish_id: str,
-    session: AsyncSession = Depends(get_async_session),
+    dish_id: str, service: DishCache = Depends(dish_service)
 ) -> StatusMessage:
-    return await dish_service.delete_dish(dish_id, session)
+    return await service.delete_dish(dish_id)

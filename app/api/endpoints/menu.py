@@ -1,10 +1,8 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.cache.services.menu_service import menu_service
-from app.core.db import get_async_session
+from app.cache.services.menu_service import MenuCache, menu_service
 from app.schemas.menu import MenuCreate, MenuOut, MenuUpdate
 from app.schemas.status import StatusMessage
 
@@ -21,8 +19,7 @@ router = APIRouter(
     summary="Создание меню",
 )
 async def create_new_menu(
-    menu: MenuCreate,
-    session: AsyncSession = Depends(get_async_session),
+    menu: MenuCreate, service: MenuCache = Depends(menu_service)
 ) -> MenuOut:
     """
     Создание меню:
@@ -30,7 +27,7 @@ async def create_new_menu(
     - **title**: название (должно быть уникальным)
     - **description**: описание (опционально)
     """
-    return await menu_service.create_menu(menu, session)
+    return await service.create_menu(menu)
 
 
 @router.get(
@@ -40,10 +37,9 @@ async def create_new_menu(
     summary="Просмотр меню по id",
 )
 async def get_one_menu(
-    menu_id: str,
-    session: AsyncSession = Depends(get_async_session),
+    menu_id: str, service: MenuCache = Depends(menu_service)
 ) -> MenuOut:
-    return await menu_service.get_menu(menu_id, session)
+    return await service.get_menu(menu_id)
 
 
 @router.get(
@@ -52,10 +48,8 @@ async def get_one_menu(
     status_code=HTTPStatus.OK,
     summary="Просмотр списка всех меню",
 )
-async def get_all_menus(
-    session: AsyncSession = Depends(get_async_session),
-) -> list[MenuOut]:
-    return await menu_service.get_menu_list(session)
+async def get_all_menus(service: MenuCache = Depends(menu_service)) -> list[MenuOut]:
+    return await service.get_menu_list()
 
 
 @router.patch(
@@ -65,9 +59,7 @@ async def get_all_menus(
     summary="Обновление меню",
 )
 async def to_update_menu(
-    menu_id: str,
-    obj_in: MenuUpdate,
-    session: AsyncSession = Depends(get_async_session),
+    menu_id: str, obj_in: MenuUpdate, service: MenuCache = Depends(menu_service)
 ) -> MenuOut:
     """
     Обновление меню:
@@ -75,7 +67,7 @@ async def to_update_menu(
     - **title**: обновленное название (должно быть уникальным)
     - **description**: обновленное описание (опционально)
     """
-    return await menu_service.update_menu(menu_id, obj_in, session)
+    return await service.update_menu(menu_id, obj_in)
 
 
 @router.delete(
@@ -85,7 +77,6 @@ async def to_update_menu(
     summary="Удаление меню по id",
 )
 async def to_delete_menu(
-    menu_id: str,
-    session: AsyncSession = Depends(get_async_session),
+    menu_id: str, service: MenuCache = Depends(menu_service)
 ) -> StatusMessage:
-    return await menu_service.delete_menu(menu_id, session)
+    return await service.delete_menu(menu_id)
