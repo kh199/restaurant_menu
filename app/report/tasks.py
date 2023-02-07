@@ -12,29 +12,29 @@ def write_report(menus):
 
     workbook = xlsxwriter.Workbook(f"app/data/{name}.xlsx")
     worksheet = workbook.add_worksheet()
-    
+
     set_format = workbook.add_format()
     set_format.set_bold()
     set_format.set_font_size(12)
     set_format.set_text_wrap()
-    set_format.set_align('vjustify')
-    set_format.set_font_name('Times New Roman')
+    set_format.set_align("vjustify")
+    set_format.set_font_name("Times New Roman")
 
     dish_format = workbook.add_format()
     dish_format.set_bold()
     dish_format.set_italic()
     dish_format.set_font_size(10)
     dish_format.set_text_wrap()
-    dish_format.set_align('vjustify')
-    dish_format.set_font_name('Times New Roman')
+    dish_format.set_align("vjustify")
+    dish_format.set_font_name("Times New Roman")
 
     dish_title_format = workbook.add_format()
     dish_title_format.set_bold()
     dish_title_format.set_italic()
     dish_title_format.set_font_size(12)
     dish_title_format.set_text_wrap()
-    dish_title_format.set_align('vjustify')
-    dish_title_format.set_font_name('Times New Roman')
+    dish_title_format.set_align("vjustify")
+    dish_title_format.set_font_name("Times New Roman")
 
     worksheet.set_column(1, 4, 40, set_format)
 
@@ -79,4 +79,3 @@ def write_report(menus):
         dish_count = 1
 
     workbook.close()
-
