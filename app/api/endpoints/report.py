@@ -39,18 +39,18 @@ async def create_task_for_report(
 
 @router.get(
     "/{task_id}",
-    response_model=StatusMessage,
+    response_class=FileResponse,
     status_code=HTTPStatus.OK,
     summary="Запрос статуса и скачивание отчета",
 )
 async def get_task_status(
     task_id: str,
-) -> StatusMessage | FileResponse:
+) -> FileResponse | StatusMessage:
     result = AsyncResult(task_id)
     if result.ready():
         return FileResponse(
             path=f"app/data/{task_id}.xlsx",
-            media_type="application/octet-stream",
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             filename=f"Меню от {datetime.now().strftime(FORMAT)}.xlsx",
         )
     return StatusMessage(
