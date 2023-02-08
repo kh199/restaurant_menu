@@ -17,7 +17,8 @@ docker-compose -f docker-compose.tests.yml up
 
 ### Report
 + **POST**   ```/api/v1/report``` запрос для генерации отчета в формате xlsx
-+ **GET**   ```/api/v1/report``` запрос статуса задачи и скачивание отчета
++ **GET**   ```/api/v1/report/{task_id}``` запрос статуса задачи
++ **GET**   ```/api/v1/report/{task_id}/download``` скачивание отчета
 
 ### Menus
 + **POST**   ```/api/v1/menus```создание меню
